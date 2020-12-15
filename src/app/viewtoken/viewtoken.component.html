@@ -1,0 +1,210 @@
+<div class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Select following to View Token </h4>
+            <div class="form-group">
+                <div class="input-group">
+                    <select [(ngModel)]="searchBy" (change)="getDetailsBy(searchBy)"
+                        class="form-control border-primary">
+                        <option [ngValue]="selected">View Token By</option>
+                        <option value="1">CID number</option>
+                        <option value="2">Vehicle Number</option>
+                        <option value="3">Driving License Number</option>
+                        <option value="4">Learner License Number</option>
+                    </select>
+                </div>
+                <br>
+
+                <div *ngIf="cidForm" class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon bg-info bg-info" id="colored-addon1">
+                            <i class="fa fa-address-book"></i>
+                        </span>
+                        <input maxlength="11" type="text" [(ngModel)]="cidNumber" class="form-control border-primary"
+                            placeholder="Enter CID Number here for your details" aria-describedby="colored-addon1">
+                    </div>
+                </div>
+                <div *ngIf="vehicleNoForm" class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon bg-info bg-info" id="colored-addon1">
+                            <i class="fa fa-address-book"></i>
+                        </span>
+
+                        <div class="col-sm-2">
+                            <select [(ngModel)]="vf_initial" class="form-control border-primary">
+                                <option [ngValue]="selected">Select</option>
+                                <option value="BP">BP</option>
+                                <option value="BG">BG</option>
+                                <option value="BG">BT</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <select [(ngModel)]="vm_initial" class="form-control border-primary">
+                                <option [ngValue]="selected">Select</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <select [(ngModel)]="vl_initial" class="form-control border-primary">
+                                <option [ngValue]="selected">Select</option>
+                                <option value=" "> </option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <p style="text-align: center;">-</p>
+                        </div>
+
+                        <input maxlength="5" type="text" [(ngModel)]="v_number" class="form-control border-primary"
+                            placeholder="Enter {{searchTitle}} here for details" aria-describedby="colored-addon1">
+                    </div>
+                </div>
+                <div *ngIf="drivingLicenseNumberForm" class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon bg-info bg-info" id="colored-addon1">
+                            <i class="fa fa-address-book"></i>
+                        </span>
+
+                        <div class="col-sm-2">
+                            <select [(ngModel)]="dl_initial" class="form-control border-primary">
+                                <option [ngValue]="selected">Select</option>
+                                <option value="T">T</option>
+                                <option value="P">P</option>
+                                <option value="G">G</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="PD">PD</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <p style="text-align: center;">-</p>
+                        </div>
+
+                        <input maxlength="5" type="text" [(ngModel)]="dl_number" class="form-control border-primary"
+                            placeholder="Enter {{searchTitle}} here for details" aria-describedby="colored-addon1">
+                    </div>
+                </div>
+
+                <div *ngIf="learnerLicenseNumberForm" class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon bg-info bg-info" id="colored-addon1">
+                            <i class="fa fa-address-book"></i>
+                        </span>
+
+                        <div class="col-sm-2">
+                            <select [(ngModel)]="ll_initial" class="form-control border-primary">
+                                <option [ngValue]="selected">Select</option>
+                                <option value="T">T/LL</option>
+                                <option value="P">P/LL</option>
+                                <option value="G">G/LL</option>
+                                <option value="S">S/LL</option>
+                                <option value="M">M/LL</option>
+                                <option value="PD">PD/LL</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <p style="text-align: center;">-</p>
+                        </div>
+
+                        <input maxlength="5" type="text" [(ngModel)]="ll_number" class="form-control border-primary"
+                            placeholder="Enter {{searchTitle}} here for details" aria-describedby="colored-addon1">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button *ngIf="cidForm" (click)="viewTokenByCidNumber()" class="btn btn-info">Search
+                        Details</button>
+
+                    <button *ngIf="vehicleNoForm" class="btn btn-info">Search
+                        Details</button>
+
+                    <button *ngIf="drivingLicenseNumberForm" class="btn btn-info">Search
+                        Details</button>
+
+                    <button *ngIf="learnerLicenseNumberForm" class="btn btn-info">Search
+                        Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="viewDetails" class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Token Details</h4>
+            <div class="table-responsive">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Token Number:</label>
+                    <div class="col-sm-9">
+                        <p style="font-weight: bold;">{{token_number}}</p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Appointment Time:</label>
+                    <div class="col-sm-9">
+                        <p style="font-weight: bold;">{{appointmentTimeFrom}} to {{appointmentTimeTo}}</p>
+                    </div>
+                </div>
+                <h4 class="card-title">Service Availed</h4>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                Customer Name
+                            </th>
+                            <th>
+                               Transaction
+                            </th>
+                            <th>
+                                Services
+                            </th>
+                            <th>
+                                Identity Number
+                            </th>
+                            <th>
+                                Identity Type
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ad of cidViewTokenResponse; let i=index;">
+                            <td>
+                               {{ad.first_name}} {{ad.middle_name}} {{ad.last_name}}
+                            </td>
+                            <td>
+                                {{ad.service_type}}
+                            </td>
+                            <td>
+                                {{ad.service}}
+                            </td>
+                            <td>
+                                {{ad.identity_number}}
+                            </td>
+                            <td>
+                                {{ad.identity_type}}
+                            </td>
+                           
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+       
+    </div>
+</div>

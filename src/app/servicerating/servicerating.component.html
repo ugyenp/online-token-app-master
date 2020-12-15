@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="col-md-12 grid-margin stretch-card">
+        <div *ngIf="showRatingSuccessful" class="alert alert-success" role="alert">
+          Your feedback is sent. Thanks for
+        </div>
+
+        <div class="card" *ngIf="showRatingForm">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card-body">
+                <div class="card">
+                  <img width="250" height="400" src="../../assets/images/larry.jpg" alt="John" style="width:100%">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card-body">
+                <div class="form-group">
+                  <p style="font-weight: bold;">Served By: {{official_name}}</p>
+                </div><br>
+                <div class="form-group">
+                  <p style="font-weight: bold;">Serving Date: {{date_served}}</p>
+                </div><br>
+                <div class="form-group">
+                  <p style="font-weight: bold;">Serving Time: {{time_served}}</p>
+                </div><br>
+                <div class="form-group">
+                  <p style="font-weight: bold;">Rate:</p>
+                  <ngb-rating [max]="5" [(rate)]="currentRate" [readonly]="false"></ngb-rating>
+                </div>
+
+                <div class="form-group">
+                  <p style="font-weight: bold;">Remarks:</p>
+                  <div class="input-group">
+                    <textarea [(ngModel)]="remarks" class="form-control border-primary" placeholder=""
+                      aria-describedby="colored-addon1">
+                          Write your remarks here
+                        </textarea>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <button (click)="sendRating()" class="btn btn-info"> Send</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

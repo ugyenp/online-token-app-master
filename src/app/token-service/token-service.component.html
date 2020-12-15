@@ -1,0 +1,474 @@
+<div class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title"> We have also online services to apply for our renewal and Replacement service </h2>
+            <table>
+                <tr>
+                    <td> <button class="btn btn-primary">Renew Learner License</button></td>
+                    <td><button class="btn btn-primary">Renew Driving License</button></td>
+                    <td> <button class="btn btn-primary">Renew Vehicle Registration</button></td>
+                </tr>
+                <tr>
+                    <td><button class="btn btn-primary">Replace Learner License</button></td>
+                    <td><button class="btn btn-primary">Replace Driving License</button></td>
+                    <td>  <button class="btn btn-primary">Replace Vehicle Registration</button></td>
+                </tr>
+            </table>
+           <br><br>
+
+            <h4 class="card-title">Enter CID Number, Driving License Number or Learner Liscense Number </h4>
+            <div class="form-group">
+                <div class="input-group">
+                    <select [(ngModel)]="searchBy" (change)="getDetailsBy(searchBy)"
+                        class="form-control border-primary">
+                        <option [ngValue]="selected">Get Token By</option>
+                        <option value="1">CID number</option>
+                        <option value="2">Vehicle Number</option>
+                        <option value="3">Driving License Number</option>
+                        <option value="4">Learner License Number</option>
+                    </select>
+                </div>
+                <br>
+                <div *ngIf="cidForm" class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon bg-info bg-info" id="colored-addon1">
+                            <i class="fa fa-address-book"></i>
+                        </span>
+                        <input maxlength="11" type="text" [(ngModel)]="cidNumber" class="form-control border-primary"
+                            placeholder="Enter CID Number here for your details" aria-describedby="colored-addon1">
+                    </div>
+                </div>
+                <div *ngIf="vehicleNoForm" class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon bg-info bg-info" id="colored-addon1">
+                            <i class="fa fa-address-book"></i>
+                        </span>
+
+                        <div class="col-sm-2">
+                            <select [(ngModel)]="vf_initial" class="form-control border-primary">
+                                <option [ngValue]="selected">Select</option>
+                                <option value="BP">BP</option>
+                                <option value="BG">BG</option>
+                                <option value="BG">BT</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <select [(ngModel)]="vm_initial" class="form-control border-primary">
+                                <option [ngValue]="selected">Select</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <select [(ngModel)]="vl_initial" class="form-control border-primary">
+                                <option [ngValue]="selected">Select</option>
+                                <option value=" "> </option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <p style="text-align: center;">-</p>
+                        </div>
+
+                        <input maxlength="5" type="text" [(ngModel)]="v_number" class="form-control border-primary"
+                            placeholder="Enter vehicle number" aria-describedby="colored-addon1">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <select [(ngModel)]="vehicle_type_id" class="form-control border-primary">
+                            <option [ngValue]="selected">Select Vehicle Type</option>
+                            <option *ngFor="let vt of vehicleTypeResponse;" value="{{vt.vehicle_Type_Id}}">
+                                {{vt.vehicle_Type_Name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div *ngIf="drivingLicenseNumberForm" class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon bg-info bg-info" id="colored-addon1">
+                            <i class="fa fa-address-book"></i>
+                        </span>
+
+                        <div class="col-sm-2">
+                            <select [(ngModel)]="dl_initial" class="form-control border-primary">
+                                <option [ngValue]="selected">Select</option>
+                                <option value="T">T</option>
+                                <option value="P">P</option>
+                                <option value="G">G</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="PD">PD</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <p style="text-align: center;">-</p>
+                        </div>
+
+                        <input maxlength="5" type="text" [(ngModel)]="dl_number" class="form-control border-primary"
+                            placeholder="Enter Driving License Number" aria-describedby="colored-addon1">
+                    </div>
+                </div>
+
+                <div *ngIf="learnerLicenseNumberForm" class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon bg-info bg-info" id="colored-addon1">
+                            <i class="fa fa-address-book"></i>
+                        </span>
+
+                        <div class="col-sm-2">
+                            <select [(ngModel)]="ll_initial" class="form-control border-primary">
+                                <option [ngValue]="selected">Select</option>
+                                <option value="T">T/LL</option>
+                                <option value="P">P/LL</option>
+                                <option value="G">G/LL</option>
+                                <option value="S">S/LL</option>
+                                <option value="M">M/LL</option>
+                                <!-- <option value="PD">PD/LL</option> -->
+                            </select>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <p style="text-align: center;">-</p>
+                        </div>
+
+                        <input maxlength="5" type="text" [(ngModel)]="ll_number" class="form-control border-primary"
+                            placeholder="Enter {{searchTitle}} here for details" aria-describedby="colored-addon1">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button *ngIf="cidForm" (click)="getAllDetailsByCidNumber()" class="btn btn-info">Search
+                        Details</button>
+
+                    <button *ngIf="vehicleNoForm" (click)="getAllDetailsByVehicleNumber()" class="btn btn-info">Search
+                        Details</button>
+
+                    <button *ngIf="drivingLicenseNumberForm" (click)="getAllDetailsByDrivingLicenseNumber()"
+                        class="btn btn-info">Search
+                        Details</button>
+
+                    <button *ngIf="learnerLicenseNumberForm" class="btn btn-info">Search
+                        Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="otpVerifiedAlert" class="col-12 grid-margin">
+    <div id="pdfTable" #pdfTable class="card">
+        <div class="card-body">
+            <h3> {{successMsg}}</h3>
+            <p>Token number: {{tokenNumber}}</p>
+            <p>Counter number: {{counter_number}}</p>
+            <p>Counter Person: {{counterPerson}}</p>
+            <p>Service Type: {{service_type}}</p>
+            <p>Appointment Time: {{appointmentTimeFrom}} to {{appointmentTimeTo}}</p>
+            <p>Date: {{tokenDate}}</p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" (click)="downloadAsPDF()">Export To PDF</button>
+
+    </div>
+</div>
+
+<div *ngIf="showServices" class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Apply for service</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                Customer Name
+                            </th>
+                            <th>
+                                Service Name
+                            </th>
+                            <th>
+                                Identity Number
+                            </th>
+                            <th>
+                                Identity Type
+                            </th>
+                            <th>
+                                Expiry Date
+                            </th>
+                            <th>
+                                Choose service
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ad of allDetailsResponse; let i=index;">
+                            <td>
+                                {{ad.First_Name}} {{ad.Middle_Name}} {{ad.Last_Name}}
+                            </td>
+                            <td>
+                                {{ad.serviceType}}
+                            </td>
+                            <td>
+                                {{ad.identityNo}}
+                            </td>
+                            <td>
+                                {{ad.identityType}}
+                            </td>
+                            <td>
+                                {{ad.expiryDate}}
+                            </td>
+                            <td>
+                                <select [(ngModel)]="service[i]" class="form-control border-primary">
+                                    <option [ngValue]="selected">Choose Service</option>
+                                    <option *ngFor="let sr of serviceResponse" value="{{sr.service_Name}}">{{sr.service_Name}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div *ngIf="showServicesVehicle" class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Apply for service</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                Customer Name
+                            </th>
+                            <th>
+                                Service Name
+                            </th>
+                            <th>
+                                Identity Number
+                            </th>
+                            <th>
+                                Identity Type
+                            </th>
+                            <th>
+                                Expiry Date
+                            </th>
+                            <th>
+                                Choose service
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ad of allDetailsResponseVehicle; let i=index;">
+                            <td>
+                                {{ad.First_Name}} {{ad.Middle_Name}} {{ad.Last_Name}}
+                            </td>
+                            <td>
+                                {{ad.serviceType}}
+                            </td>
+                            <td>
+                                {{ad.identityNo}}
+                            </td>
+                            <td>
+                                {{ad.identityType}}
+                            </td>
+                            <td>
+                                {{ad.expiryDate}}
+                            </td>
+                            <td>
+                                <select [(ngModel)]="service[i]" class="form-control border-primary">
+                                    <select [(ngModel)]="service[i]" class="form-control border-primary">
+                                        <option [ngValue]="selected">Choose Service</option>
+                                        <option *ngFor="let sr of serviceResponse" value="{{sr.service_Name}}">{{sr.service_Name}}</option>
+                                    </select>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div *ngIf="showServicesDrivingLicense" class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Apply for service</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                Customer Name
+                            </th>
+                            <th>
+                                Service Name
+                            </th>
+                            <th>
+                                Identity Number
+                            </th>
+                            <th>
+                                Identity Type
+                            </th>
+                            <th>
+                                Expiry Date
+                            </th>
+                            <th>
+                                Choose service
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ad of allDetailsResponseDrivingLicense; let i=index;">
+                            <td>
+                                {{ad.First_Name}} {{ad.Middle_Name}} {{ad.Last_Name}}
+                            </td>
+                            <td>
+                                {{ad.serviceType}}
+                            </td>
+                            <td>
+                                {{ad.identityNo}}
+                            </td>
+                            <td>
+                                {{ad.identityType}}
+                            </td>
+                            <td>
+                                {{ad.expiryDate}}
+                            </td>
+                            <td>
+                                <select [(ngModel)]="service[i]" class="form-control border-primary">
+                                    <select [(ngModel)]="service[i]" class="form-control border-primary">
+                                        <option [ngValue]="selected">Choose Service</option>
+                                        <option *ngFor="let sr of serviceResponse" value="{{sr.service_Name}}">{{sr.service_Name}}</option>
+                                    </select>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Token details -->
+<div *ngIf="token_details_card" class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <div>
+                <p style="font-weight: bold;" class="card-description">
+                    Token Details
+                </p>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">RSTA Location *:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="regionId" (ngModelChange)="getTokenDetails(regionId)"
+                            class="form-control border-primary">
+                            <option [ngValue]="selected">Select Location</option>
+                            <option value="{{region.region_id}}" *ngFor="let region of rstaRegionMaster;">
+                                {{region.region_name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Counter Details *:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="counter_details" (change)="getCounterDetails(counter_details)"
+                            class="form-control border-primary">
+                            <option [ngValue]="selected">Select Person </option>
+                            <option value="{{cd.user_id}} - {{cd.counter_no}}" *ngFor="let cd of counter_api_response;">
+                                Counter Number: {{cd.counter_no}} Counter Person: {{cd.name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Token Avaliablity Date *:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="tokenDate" (ngModelChange)="getTokenTime(tokenDate)"
+                            class="form-control border-primary">
+                            <option [ngValue]="selected">Select Date</option>
+                            <option *ngFor="let res of responseregion;" value="{{res.token_date}}">{{res.token_date}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Token Avaliablity Time *:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="appointmentTime" (ngModelChange)="appointmentTimeSplit(appointmentTime)"
+                            class="form-control border-primary">
+                            <option [ngValue]="selected">Select Time</option>
+                            <option *ngFor="let t of TimesDisplay;">{{t}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Mobile Number*:</label>
+                    <div class="col-sm-9">
+                        <input placeholder="Enter Mobile Number" [(ngModel)]="mobileNumber" type="text"
+                            class="form-control border-primary">
+                    </div>
+                </div>
+
+                <p style="color: red;">{{errorMsg}}</p>
+
+                <div class="template-demo">
+                    <button (click)="open(mymodal)" type="button" class="btn btn-primary"><i class="fa fa-file"></i>Send
+                        OTP</button> &nbsp; &nbsp; &nbsp;
+                    <button (click)="cancealCurrentPage()" type="button" class="btn btn-danger">
+                        <i class="fa fa-ban"></i>Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #mymodal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">OTP is sent to your mobile number</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <input maxlength="5" [(ngModel)]="otp" placeholder="Please enter your OTP here" type="number"
+                    class="form-control">
+
+            </div>
+        </div>
+        <p style="color:red;"> Please enter your OTP within {{counter}} seconds</p>
+    </div>
+    <div class="modal-footer">
+        <button (click)="verifyOtp(otp)" class="btn btn-info">Verify OTP</button>
+        <button (click)="modal.dismiss('Cross click')" class="btn btn-danger">Cancel</button>
+
+        <!-- OTP failed generated message -->
+        <p style="color: red;">
+            {{errorMsg}}
+        </p>
+    </div>
+</ng-template>

@@ -1,0 +1,649 @@
+<div *ngIf="service_card" class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <!-- <h2 class="card-title"> We have also online services to apply for our new service </h2>
+            <button [routerLink]="['/routePath']" routerLinkActive="router-link-active"  class="btn btn-primary">New Learner License</button>
+            <button class="btn btn-primary">New Driving License</button>
+            <button class="btn btn-primary">Vehicle Registration</button><br><br> -->
+            <h4 class="card-title"> Select the new service you want to avail </h4>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Select Services*:</label>
+                <div class="col-sm-9">
+                    <select [(ngModel)]="service_type" (change)="selectedService(service_type)"
+                        class="form-control border-primary">
+                        <option [ngValue]="selected">New service</option>
+                        <option value="Driving License">Driving License</option>
+                        <option value="Learner License">Learner License</option>
+                        <option value="Vehicle Registration">Vehicle Registration</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="otpVerifiedAlert" class="col-12 grid-margin">
+    <div id="pdfTable" #pdfTable class="card">
+        <div class="card-body">
+            <h3> {{successMsg}}</h3>
+            <p>Token number: {{tokenNumber}}</p>
+            <p>Counter number: {{counter_number}}</p>
+            <p>Counter Person: {{counterPerson}}</p>
+            <p>Service Type: {{service_type}}</p>
+            <p>Appointment Time: {{appointmentTimeFrom}} to {{appointmentTimeTo}}</p>
+            <p>Date: {{tokenDate}}</p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" (click)="downloadAsPDF()">Export To PDF</button>
+
+    </div>
+</div>
+
+<div *ngIf="learner_license_card" class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title"> Fill up the following Details </h4>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Cid Number/ Route Permit Number*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="cid_or_permit_no" placeholder="Enter CID/ Route Permit Number and press ENTER"
+                        type="text" class="form-control border-primary">
+                    <button (click)="getPersonalDetailsByCidOrPermit(cid_or_permit_no)"
+                        class="btn btn-primary">Search</button>
+                </div>
+            </div>
+
+            <div *ngIf="personal_details_exist">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">First Name:</label>
+                    <div class="col-sm-9">
+                        <input readonly [(ngModel)]="first_name" type="text" class="form-control border-primary">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Middle Name:</label>
+                    <div class="col-sm-9">
+                        <input readonly [(ngModel)]="middle_name" type="text" class="form-control border-primary">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Last Name:</label>
+                    <div class="col-sm-9">
+                        <input readonly [(ngModel)]="last_name" type="text" class="form-control border-primary">
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="personal_details_not_exist">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">First Name*:</label>
+                    <div class="col-sm-9">
+                        <input placeholder="Enter First Name" [(ngModel)]="first_name" type="text"
+                            class="form-control border-primary">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Middle Name:</label>
+                    <div class="col-sm-9">
+                        <input placeholder="Enter Middle Name" [(ngModel)]="middle_name" type="text"
+                            class="form-control border-primary">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Last Name:</label>
+                    <div class="col-sm-9">
+                        <input placeholder="Enter Last Name" [(ngModel)]="last_name" type="text"
+                            class="form-control border-primary">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Mobile Number*:</label>
+                <div class="col-sm-9">
+                    <input placeholder="Enter Mobile Number" [(ngModel)]="mobile_number" type="text"
+                        class="form-control border-primary">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Learner License document check -->
+<div *ngIf="learner_license_card" class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title"> Check if you have the following documents </h4>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Fill in the application form (Download from website)*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="bio_data" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Medical Fitness Certificate (Download from website)*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="medical_certificate" type="checkbox" class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Citizen ID Card Copy *:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="cid_copy" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">One Passport size photograph *:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="pass_photo" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label style="color:blue" class="col-sm-3 col-form-label"><a
+                        (click)="goToLink('https://www.rsta.gov.bt/rstaweb/load.html?id=65&field_cons=PAGE')">Click here
+                        for more...</a> </label>
+
+            </div>
+            <p style="color: red;">{{errorMsg}}</p>
+            <div class="modal-footer">
+                <button (click)="applyForLearnerLicenseToken()" class="btn btn-info">Submit Details</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="driving_license_card" class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title"> Fill up the following Details </h4>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Search Details By*:</label>
+                <div class="col-sm-9">
+                    <select [(ngModel)]="select_search" (change)="selectedSearch(select_search)"
+                        class="form-control border-primary">
+                        <option [ngValue]="selected">Search By</option>
+                        <option value="L">Learner License Number</option>
+                        <option value="C">CID Number</option>
+                    </select>
+                </div>
+            </div>
+
+            <div *ngIf="cid_form" class="form-group row">
+                <label class="col-sm-3 col-form-label">Enter CID Number:</label>
+                <div class="col-sm-9">
+                    <input placeholder="Please Enter CID Number and press ENTER" [(ngModel)]="cid_or_permit_no"
+                        type="text" class="form-control border-primary">
+                    <button (click)="getPersonalDetailsByCidOrPermit(cid_or_permit_no)"
+                        class="btn btn-primary">Search</button>
+                </div>
+
+            </div>
+
+            <div *ngIf="ll_no_form" class="form-group row">
+                <label class="col-sm-3 col-form-label">Enter Learner License Number:</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <span class="input-group-addon bg-info bg-info" id="colored-addon1">
+                            <i class="fa fa-address-book"></i>
+                        </span>
+                        <div class="col-sm-2">
+                            <select [(ngModel)]="ll_initial" class="form-control border-primary">
+                                <option [ngValue]="selected">Select</option>
+                                <option value="T">T/LL</option>
+                                <option value="P">P/LL</option>
+                                <option value="G">G/LL</option>
+                                <option value="S">S/LL</option>
+                                <option value="M">M/LL</option>
+                                <!-- <option value="PD">PD/LL</option> -->
+                            </select>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <p style="text-align: center;">-</p>
+                        </div>
+
+                        <input maxlength="5" type="text" [(ngModel)]="ll_number" class="form-control border-primary"
+                            placeholder="Enter Learner License Number and press Enter"
+                            (keyup.enter)="getPersonalDetailsByLearnerLicense(ll_initial,ll_number)"
+                            aria-describedby="colored-addon1">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">First Name:</label>
+                <div class="col-sm-9">
+                    <input readonly [(ngModel)]="first_name" type="text" class="form-control border-primary">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Middle Name:</label>
+                <div class="col-sm-9">
+                    <input readonly [(ngModel)]="middle_name" type="text" class="form-control border-primary">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Last Name:</label>
+                <div class="col-sm-9">
+                    <input readonly [(ngModel)]="last_name" type="text" class="form-control border-primary">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Mobile Number*:</label>
+                <div class="col-sm-9">
+                    <input placeholder="Enter Mobile Number" [(ngModel)]="mobile_number" type="text"
+                        class="form-control border-primary">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Driving License document check -->
+<div *ngIf="driving_license_card" class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title"> Check if you have the following documents </h4>
+            <!-- <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Medical Fitness Certificate:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="medical_certificate" type="checkbox" class="form-control">
+                </div>
+            </div> -->
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Fill in the application form(Download from website)*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="bio_form" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Valid Learner License*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="valid_ll" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"> Copy of Citizenship Identity Card*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="cid_copy" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">One Recent Passport Size Photograph*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="pass_photo" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Attend personally for necessary tests*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="test_attend" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Certificate for Introductory Course*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="intd_certificate" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Completed atleast 3 months of training from driving School or 6
+                    months for
+                    others*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="driving_training" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label style="color:blue" class="col-sm-3 col-form-label"><a
+                        (click)="goToLink('https://www.rsta.gov.bt/rstaweb/load.html?id=64&field_cons=PAGE')">Click here
+                        for more...</a> </label>
+            </div>
+            <p style="color: red;">{{errorMsg}}</p>
+            <div class="modal-footer">
+                <button (click)="applyForDrivingLicenseToken()" class="btn btn-info">Submit Details</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="vehicle_registration_card" class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title"> Fill up the following Details </h4>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Customer Type*:</label>
+                <div class="col-sm-9">
+                    <select [(ngModel)]="customer_type" (change)="selectedCustomerType(customer_type)"
+                        class="form-control border-primary">
+                        <option [ngValue]="selected">Customer Type</option>
+                        <option value="1">Personal</option>
+                        <option value="2">Organisation</option>
+                    </select>
+                </div>
+            </div>
+            <div *ngIf="organisation_card">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Owner Type*:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="organisationTypeId" (change)="selectedOwner(organisationTypeId)"
+                            class="form-control border-primary">
+                            <option [ngValue]="selected">Owner Type</option>
+                            <option value="{{own.owner_Type_Id}}" *ngFor="let own of ownerTypeResponse;">
+                                {{own.owner_Name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div *ngIf="pvtType" class="form-group row">
+                    <label class="col-sm-3 col-form-label">Organisation Name*:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="organisationName" class="form-control border-primary">
+                            <option [ngValue]="selected">Organisation Name</option>
+                            <option value="{{pvt.private_Id}}" *ngFor="let pvt of pvtOrgResponse;">
+                                {{pvt.private_Name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div *ngIf="govtType" class="form-group row">
+                    <label class="col-sm-3 col-form-label">Organisation Name*:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="organisationId" (change)="selectDepartment(organisationId)"
+                            class="form-control border-primary">
+                            <option [ngValue]="selected">Organisation Name</option>
+                            <option value="{{gov.ministry_Id}}" *ngFor="let gov of govOrgResponse;">
+                                {{gov.ministry_Name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div *ngIf="royalType" class="form-group row">
+                    <label class="col-sm-3 col-form-label">Organisation Name*:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="organisationName" class="form-control border-primary">
+                            <option [ngValue]="selected">Organisation Name</option>
+                            <option value="{{rl.royal_Id}}" *ngFor="let rl of royalResponse;">
+                                {{rl.royal_Name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div *ngIf="dipType" class="form-group row">
+                    <label class="col-sm-3 col-form-label">Organisation Name*:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="organisationName" class="form-control border-primary">
+                            <option [ngValue]="selected">Organisation Name</option>
+                            <option value="{{dip.diplomat_Master_Id}}" *ngFor="let dip of diplomatResponse;">
+                                {{dip.name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div *ngIf="deptType" class="form-group row">
+                    <label class="col-sm-3 col-form-label">Department Name*:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="organisationName" class="form-control border-primary">
+                            <option [ngValue]="selected">Department Name</option>
+                            <option value="{{dept.department_Name}}" *ngFor="let dept of departmentResponse;">
+                                {{dept.department_Name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <div *ngIf="personal_card">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Cid Number/ Route Permit Number*:</label>
+                    <div class="col-sm-9">
+                        <input [(ngModel)]="cid_or_permit_no"
+                            placeholder="Enter CID/ Route Permit Number and press ENTER" type="text"
+                            class="form-control border-primary">
+                        <button (click)="getPersonalDetailsByCidOrPermit(cid_or_permit_no)"
+                            class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+
+                <div *ngIf="personal_details_exist">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">First Name:</label>
+                        <div class="col-sm-9">
+                            <input readonly [(ngModel)]="first_name" type="text" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Middle Name:</label>
+                        <div class="col-sm-9">
+                            <input readonly [(ngModel)]="middle_name" type="text" class="form-control border-primary">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Last Name:</label>
+                        <div class="col-sm-9">
+                            <input readonly [(ngModel)]="last_name" type="text" class="form-control border-primary">
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="personal_details_not_exist">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">First Name*:</label>
+                        <div class="col-sm-9">
+                            <input placeholder="Enter First Name" [(ngModel)]="first_name" type="text"
+                                class="form-control border-primary">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Middle Name:</label>
+                        <div class="col-sm-9">
+                            <input placeholder="Enter Middle Name" [(ngModel)]="middle_name" type="text"
+                                class="form-control border-primary">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Last Name:</label>
+                        <div class="col-sm-9">
+                            <input placeholder="Enter Last Name" [(ngModel)]="last_name" type="text"
+                                class="form-control border-primary">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Mobile Number*:</label>
+                <div class="col-sm-9">
+                    <input placeholder="Enter Mobile Number" [(ngModel)]="mobile_number" type="text"
+                        class="form-control border-primary">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- vehicle registration document check -->
+<div *ngIf="vehicle_registration_card" class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title"> Check if you have the following documents </h4>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Fill in the application form (Download from website)*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="app_form" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Citizen ID Card copy*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="cid_copy" type="checkbox" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">One Passport size photograph *:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="pass_photo" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Tax Clearance Certificate*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="valid_ll" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Original Challan and Invoice*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="invoice_reciept" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Emission Compliance
+                    Certificate:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="emission_certificate" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Certificate of Incorporation (for Private Company only)*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="incorporation_certificate" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Produce Vehicle for Physical Inspection*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="Inspection_certificate" type="checkbox" class="form-control border-primary">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label style="color:blue" class="col-sm-3 col-form-label"><a
+                        (click)="goToLink('https://www.rsta.gov.bt/rstaweb/load.html?id=185&field_cons=PAGE')">Click
+                        here for more...</a> </label>
+            </div>
+
+            <p style="color: red;">{{errorMsg}}</p>
+            <div class="modal-footer">
+                <button (click)="applyForVehicleRegistrationToken()" class="btn btn-info">Submit Details</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Token details -->
+<div *ngIf="token_details_card" class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <div>
+                <p style="font-weight: bold;" class="card-description">
+                    Token Details
+                </p>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">RSTA Location *:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="regionId" (ngModelChange)="getTokenDetails(regionId)"
+                            class="form-control border-primary">
+                            <option [ngValue]="selected">Select Location</option>
+                            <option value="{{region.region_id}}" *ngFor="let region of rstaRegionMaster;">
+                                {{region.region_name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Counter Details *:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="counter_details" (change)="getCounterDetails(counter_details)"
+                            class="form-control border-primary">
+                            <option [ngValue]="selected">Select Person </option>
+                            <option value="{{cd.user_id}} - {{cd.counter_no}}" *ngFor="let cd of counter_api_response;">
+                                Counter Number: {{cd.counter_no}} Counter Person: {{cd.name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Token Avaliablity Date *:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="tokenDate" (ngModelChange)="getTokenTime(tokenDate)"
+                            class="form-control border-primary">
+                            <option [ngValue]="selected">Select Date</option>
+                            <option *ngFor="let res of responseregion;" value="{{res.token_date}}">{{res.token_date}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Token Avaliablity Time *:</label>
+                    <div class="col-sm-9">
+                        <select [(ngModel)]="appointmentTime" (ngModelChange)="appointmentTimeSplit(appointmentTime)"
+                            class="form-control border-primary">
+                            <option [ngValue]="selected">Select Time</option>
+                            <option *ngFor="let t of TimesDisplay;">{{t}}</option>
+                        </select>
+                    </div>
+                </div>
+                <p style="color: red;">{{errorMsg}}</p>
+
+                <div class="template-demo">
+                    <button (click)="open(mymodal)" type="button" class="btn btn-primary"><i class="fa fa-file"></i>Send
+                        OTP</button> &nbsp; &nbsp; &nbsp;
+                    <button (click)="cancealCurrentPage()" type="button" class="btn btn-danger">
+                        <i class="fa fa-ban"></i>Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- popup models to enter OTP file -->
+<ng-template #mymodal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">OTP is sent to your mobile number</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <input maxlength="5" [(ngModel)]="otp" placeholder="Please enter your OTP here" type="number"
+                    class="form-control">
+            </div>
+        </div>
+        <p style="color:red;"> Please enter your OTP within {{counter}} seconds</p>
+    </div>
+    <div class="modal-footer">
+        <button (click)="verifyOtp(otp)" class="btn btn-info">Verify OTP</button>
+        <button (click)="modal.dismiss('Cross click')" class="btn btn-danger">Cancel</button>
+
+        <!-- OTP failed generated message -->
+        <p style="color: red;">
+            {{errorMsg}}
+        </p>
+    </div>
+</ng-template>
+<!-- popup models to enter OTP file ends-->

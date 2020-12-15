@@ -1,0 +1,436 @@
+<div *ngIf="availAnotherService" class="card-body">
+  <div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+      <div class="card">
+
+        <div class="card-body">
+
+          <div *ngIf="otpVerifiedAlert" class="alert alert-success" role="alert">
+            Your otp is Succesfully Verified. <b>Your Token number is {{tokenNumber}}</b>
+          </div>
+          Do you want to avail another service
+          <div class="modal-footer">
+            <button  (click)="selectAnotherServiceYes()" class="btn btn-info">Yes</button>
+            <button (click)="selectAnotherServiceNo()" class="btn btn-danger">No</button>
+          </div>
+        </div>
+
+        <div *ngIf="anotherServiceOption" class="card-body">
+          <p style="font-weight: bold;" class="card-description">
+            Select Transaction
+          </p>
+
+          <div class="form-group">
+            <div class="input-group">
+              <select [(ngModel)]="transactionId"  (change)="showSevicesBasedOnId(transactionId)"
+                class="form-control border-primary">
+                <option [ngValue]="selected">Select Transaction</option>
+                <option *ngFor="let trans of transactionName;" value="{{trans.id}}">{{trans.transaction_type}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <p style="font-weight: bold;" class="card-description">
+            Select Service
+          </p>
+          <div class="form-group">
+            <div class="input-group">
+              <select [(ngModel)]="serviceId" (change)="selectedServices(serviceId)"
+                class="form-control border-primary">
+                <option [ngValue]="selected">Select Services</option>
+                <option *ngFor="let srs of serviceName;" value="{{srs.id}}">{{srs.services_type}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button  (click)="updateSearch()" class="btn btn-info">Update</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Service type whether Generate token or view Token -->
+<div class="row" *ngIf="serviceDetails">
+  <div class="col-12 grid-margin stretch-card">
+
+    <div class="card">
+      <div class="template-demo">
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/dashboard">Apply For Token</a></li>
+            <li class="breadcrumb-item"><a routerLink="/viewtoken">View Token Details</a></li>
+            <li class="breadcrumb-item"><a routerLink="/servicerating">Rate Our Service</a></li>
+            <li class="breadcrumb-item"><a routerLink="/token-service">Get Token</a></li>
+          </ol>
+        </nav>
+      </div>
+
+      <div class="card-body">
+        <!-- <h4 class="card-title">Service Type</h4> -->
+        <div class="row">
+          <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+
+                <p style="font-weight: bold;" class="card-description">
+                  Select Transaction
+                </p>
+
+                <div class="form-group">
+                  <div class="input-group">
+                    <select [(ngModel)]="transactionId"  (change)="showSevicesBasedOnId(transactionId)"
+                      class="form-control border-primary">
+                      <option [ngValue]="selected">Select Transaction</option>
+                      <option *ngFor="let trans of transactionName;" value="{{trans.id}}">{{trans.transaction_type}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <p style="font-weight: bold;" class="card-description">
+                  Select Service
+                </p>
+                <div class="form-group">
+                  <div class="input-group">
+                    <select [(ngModel)]="serviceId" (change)="selectedServices(serviceId)"
+                      class="form-control border-primary">
+                      <option [ngValue]="selected">Select Services</option>
+                      <option *ngFor="let srs of serviceName;" value="{{srs.id}}">{{srs.services_type}}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <p style="font-weight: bold;" class="card-description">
+                  Get Token By
+                </p>
+                <div class="form-group">
+                  <div class="input-group">
+                    <select [(ngModel)]="search" (change)="showServiceSearchForm(search)"
+                      class="form-control border-primary">
+                      <option [ngValue]="selected">Get Token By</option>
+                      <option value="1"> Cid Number</option>
+                      <option value="2">{{searchByTitle}}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div *ngIf="showCidForm" class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon bg-info bg-info" id="colored-addon1">
+                      <i class="fa fa-address-book"></i>
+                    </span>
+                    <input maxlength="11" type="text" [(ngModel)]="cidNumber" class="form-control border-primary"
+                      placeholder="Enter CID Number here for your details" aria-describedby="colored-addon1">
+                  </div>
+                </div>
+
+                <div *ngIf="invalidMsg" class="alert alert-danger">
+                  <div>
+                    {{errorMsg}}
+                  </div>
+                </div>
+
+                <div *ngIf="dlForm" class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon bg-info bg-info" id="colored-addon1">
+                      <i class="fa fa-address-book"></i>
+                    </span>
+
+                    <div class="col-sm-2">
+                      <select [(ngModel)]="dl_initial" class="form-control border-primary">
+                        <option [ngValue]="selected">Select</option>
+                        <option value="T">T</option>
+                        <option value="P">P</option>
+                        <option value="G">G</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="PD">PD</option>
+                      </select>
+                    </div>
+
+                    <div class="col-sm-1">
+                      <p style="text-align: center;">-</p>
+                    </div>
+
+                    <input maxlength="5" type="text" [(ngModel)]="dl_number" class="form-control border-primary"
+                      placeholder="Enter {{searchTitle}} here for details" aria-describedby="colored-addon1">
+                  </div>
+                </div>
+
+                <div *ngIf="llForm" class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon bg-info bg-info" id="colored-addon1">
+                      <i class="fa fa-address-book"></i>
+                    </span>
+
+                    <div class="col-sm-2">
+                      <select [(ngModel)]="ll_initial" class="form-control border-primary">
+                        <option [ngValue]="selected">Select</option>
+                        <option value="T">T/LL</option>
+                        <option value="P">P/LL</option>
+                        <option value="G">G/LL</option>
+                        <option value="S">S/LL</option>
+                        <option value="M">M/LL</option>
+                        <option value="PD">PD/LL</option>
+                      </select>
+                    </div>
+
+                    <div class="col-sm-1">
+                      <p style="text-align: center;">-</p>
+                    </div>
+
+                    <input maxlength="5" type="text" [(ngModel)]="ll_number" class="form-control border-primary"
+                      placeholder="Enter {{searchTitle}} here for details" aria-describedby="colored-addon1">
+                  </div>
+                </div>
+
+                <div *ngIf="vForm" class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon bg-info bg-info" id="colored-addon1">
+                      <i class="fa fa-address-book"></i>
+                    </span>
+
+                    <div class="col-sm-2">
+                      <select [(ngModel)]="vf_initial" class="form-control border-primary">
+                        <option [ngValue]="selected">Select</option>
+                        <option value="BP">BP</option>
+                        <option value="BG">BG</option>
+                        <option value="BG">BT</option>
+                      </select>
+                    </div>
+
+                    <div class="col-sm-2">
+                      <select [(ngModel)]="vm_initial" class="form-control border-primary">
+                        <option [ngValue]="selected">Select</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                    </div>
+
+                    <div class="col-sm-2">
+                      <select [(ngModel)]="vl_initial" class="form-control border-primary">
+                        <option [ngValue]="selected">Select</option>
+                        <option value=" "> </option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                      </select>
+                    </div>
+
+                    <div class="col-sm-1">
+                      <p style="text-align: center;">-</p>
+                    </div>
+
+                    <input maxlength="5" type="text" [(ngModel)]="v_number" class="form-control border-primary"
+                      placeholder="Enter {{searchTitle}} here for details" aria-describedby="colored-addon1">
+                  </div>
+                </div>
+
+                <div *ngIf="invalidMsgLVD" class="alert alert-danger">
+                  <div>
+                    {{errorMsg}}
+                  </div>
+                </div>
+
+
+                <div class="modal-footer">
+                  <button *ngIf="showCidForm" (click)="showAll_ItemDetailsByCidNumber()" class="btn btn-info">Search
+                    Details</button>
+
+                  <button *ngIf="dlForm" (click)="drvingLicenseDetails()" class="btn btn-info">Search
+                    Details</button>
+
+                  <button *ngIf="llForm" (click)="learnerLicenseDetails()" class="btn btn-info">Search
+                    Details</button>
+
+                  <button *ngIf="vForm" (click)="vehicleDetails()" class="btn btn-info">Search
+                    Details</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- avalil another toke -->
+    </div>
+  </div>
+</div>
+
+
+<!-- Personal details and token details -->
+<div class="row" *ngIf="tokenDetails">
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Token Details</h4>
+        <div class="row">
+          <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <!-- Show personel Details -->
+                <div>
+                  <p style="font-weight: bold;" class="card-description">
+                    Personal Details
+                  </p>
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Name:</label>
+                    <div class="col-sm-9">
+                      <input [(ngModel)]="customerName" readonly type="text" class="form-control">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Expiry date:</label>
+                    <div class="col-sm-9">
+                      <input [(ngModel)]="expirydate" readonly type="text" class="form-control">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Transaction Type:</label>
+                    <div class="col-sm-9">
+                      <input [(ngModel)]="TransactionName" readonly type="text" class="form-control">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Service Chosen:</label>
+                    <div class="col-sm-9">
+                      <input [(ngModel)]="ServiceName" readonly type="text" class="form-control">
+                    </div>
+                  </div>
+
+                </div><br>
+                <!-- Show personel Details end -->
+
+                <!-- Show Token Details -->
+                <div>
+                  <p style="font-weight: bold;" class="card-description">
+                    Token Details
+                  </p>
+
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">RSTA Location:</label>
+                    <div class="col-sm-9">
+                      <select [(ngModel)]="regionId" (ngModelChange)="getTokenDetails(regionId)"
+                        class="form-control border-primary">
+                        <option [ngValue]="selected">Select Location</option>
+                        <option value="{{region.region_id}}" *ngFor="let region of rstaRegionMaster;">
+                          {{region.region_name}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Token Avaliablity Date:</label>
+                    <div class="col-sm-9">
+                      <select [(ngModel)]="tokenDate" (ngModelChange)="getTokenTime(tokenDate)"
+                        class="form-control border-primary">
+                        <option [ngValue]="selected">Select Date</option>
+                        <option *ngFor="let res of responseregion;" value="{{res.token_date}}">{{res.token_date}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Token Avaliablity Time:</label>
+                    <div class="col-sm-9">
+                      <select [(ngModel)]="appointmentTime" (ngModelChange)="appointmentTimeSplit(appointmentTime)"
+                        class="form-control border-primary">
+                        <option [ngValue]="selected">Select Time</option>
+                        <option *ngFor="let t of TimesDisplay;">{{t}}</option>
+                      </select>
+                    </div>
+
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Mobile Number:</label>
+                    <div class="col-sm-9">
+                      <input [(ngModel)]="mobileNumber" maxlength="8" placeholder="Please enter mobile number"
+                        type="text" class="form-control border-primary">
+                    </div>
+                  </div>
+                  <!-- Show Token Details end-->
+
+                  <!-- button to genearate and cancel otp-->
+                  <div class="template-demo">
+                    <button (click)="open(mymodal)" type="button" class="btn btn-primary"><i class="fa fa-file"></i>Send
+                      OTP</button> &nbsp; &nbsp; &nbsp;
+                    <button (click)="cancealCurrentPage()" type="button" class="btn btn-danger">
+                      <i class="fa fa-ban"></i>Cancel</button>
+                  </div>
+                  <!-- button to genearate and cancel otp end-->
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<!-- popup models to enter OTP file -->
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">OTP is sent to your mobile number</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group row">
+      <div class="col-sm-12">
+        <input maxlength="5" [(ngModel)]="otp" placeholder="Please enter your OTP here" type="number"
+          class="form-control">
+
+      </div>
+    </div>
+    <p style="color:red;"> Please enter your OTP within {{counter}} seconds</p>
+  </div>
+  <div class="modal-footer">
+    <button (click)="verifyOtp(otp)" class="btn btn-info">Verify OTP</button>
+    <button (click)="modal.dismiss('Cross click')" class="btn btn-danger">Cancel</button>
+
+    <!-- OTP failed generated message -->
+    <p *ngIf="showOtpFailed" style="color: red;">
+      Invalid OTP. Please enter valid OTP
+    </p>
+  </div>
+
+
+</ng-template>
+<!-- popup models to enter OTP file ends-->
+
+<ng-template #alert_modal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">OTP is sent to your mobile number</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group row">
+      <div class="col-sm-12">
+        Service
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-info">Verify OTP</button>
+    <button (click)="modal.dismiss('Cross click')" class="btn btn-danger">Cancel</button>
+  </div>
+</ng-template>

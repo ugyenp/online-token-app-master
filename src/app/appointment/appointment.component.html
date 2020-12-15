@@ -1,0 +1,121 @@
+<div class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Personal Details </h4>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Cid Number*:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="cid_or_permit_no" placeholder="Enter CID/ Route Permit Number and press ENTER"
+                        (keyup.enter)="getPersonalDetailsByCidOrPermit(cid_or_permit_no)" type="text"
+                        class="form-control">
+                </div>
+            </div>
+
+            <div *ngIf="personal_details_exist">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">First Name*:</label>
+                    <div class="col-sm-9">
+                        <input readonly [(ngModel)]="first_name" type="text" class="form-control border-primary">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Middle Name:</label>
+                    <div class="col-sm-9">
+                        <input readonly [(ngModel)]="middle_name" type="text" class="form-control border-primary">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Last Name:</label>
+                    <div class="col-sm-9">
+                        <input readonly [(ngModel)]="last_name" type="text" class="form-control border-primary">
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="personal_details_not_exist">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">First Name*:</label>
+                    <div class="col-sm-9">
+                        <input placeholder="Enter First Name" [(ngModel)]="first_name" type="text" class="form-control border-primary">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Middle Name:</label>
+                    <div class="col-sm-9">
+                        <input placeholder="Enter Middle Name" [(ngModel)]="middle_name" type="text"
+                            class="form-control border-primary">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Last Name:</label>
+                    <div class="col-sm-9">
+                        <input placeholder="Enter Last Name" [(ngModel)]="last_name" type="text" class="form-control border-primary">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Mobile Number*:</label>
+                <div class="col-sm-9">
+                    <input placeholder="Enter Mobile Number" [(ngModel)]="mobile_number" type="text"
+                        class="form-control border-primary">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 grid-margin">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Appointment Details </h4>
+            
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Select Location*:</label>
+                <div class="col-sm-9">
+                    <select [(ngModel)]="juris_or_juristype_id" class="form-control border-primary" (change)="selectedAppointment(juris_or_juristype_id)">
+                        <option [ngValue]="selected">Location</option>
+                        <option value="{{ro.region_id}}-1" *ngFor="let ro of regionLocationResponse" >{{ro.region_name}}</option>
+                        <option value="{{bo.base_office_id}}-2" *ngFor="let bo of baseLocationReponse">{{bo.base_office_name}}</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Select Appointment With*:</label>
+                <div class="col-sm-9">
+                    <select [(ngModel)]="official_id" class="form-control border-primary">
+                        <option [ngValue]="selected">Offical List</option>
+                        <option *ngFor="let app of avaliableResponse;">
+                            {{app.user_name}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">State Reason*:</label>
+                <div class="col-sm-9">
+                    <textarea [(ngModel)]="reason" class="form-control border-primary"
+                           aria-describedby="colored-addon1">
+                          Write your reason here
+                    </textarea>
+                </div>
+            </div>
+
+            <p style="color: red;">{{errorMsg}}</p>
+
+            <div class="form-group">
+                <button (click)="bookAppointment()" class="btn btn-info"> Book Appointment</button>
+            </div>
+
+            <div *ngIf="successMsgCard" class="alert alert-success" role="alert">
+                {{successMsg}}
+             </div>
+        </div>
+    </div>
+</div>
